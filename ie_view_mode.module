@@ -1,0 +1,91 @@
+<?php
+
+/**
+ * @file
+ * Force Internet Explorer into different view modes using different
+ * X-UA-Compatible HTTP headers
+ * https://msdn.microsoft.com/en-us/library/jj676915(v=vs.85).aspx
+ */
+
+/**
+ * Implements hook_help().
+ *
+ * Displays help and module information.
+ *
+ * @param path 
+ *   Which path of the site we're using to display help
+ * @param arg 
+ *   Array that holds the current path as returned from arg() function
+ */
+function ie_view_mode_help($path, $arg) {
+  // Switch based on where we're at in Drupal
+  switch ($path) {
+    case "admin/help#ie_view_mode":
+      // When we're in the admin menu, tell the user generically what this is
+      return '<p>' . t("Forces Internet Explorer compatibility mode through the use of HTTP headers.") . '</p>';
+      break;
+  }
+}
+
+/**
+ * Implements hook_init().
+ *
+ * Sets compatibility settings into the HTTP header.
+ */
+function ie_view_mode_init() {
+  // Check to make sure a header isn't already set by a theme or other method
+  if (is_null(drupal_get_http_header('X-UA-Compatible'))) {
+    // Retrieve the setting for the mode or use Edge if none set
+    $mode = variable_get('ie_view_mode', 'IE=edge,chrome=1');
+    // If header is not present, add one that forces the preferred view
+    drupal_add_http_header('X-UA-Compatible', $mode);
+  }
+}
+
+/**
+ * Implements hook_menu().
+ *
+ * Generates menu items and permissions for administration.
+ */
+function ie_view_mode_menu() {
+  // Create the menu
+  $items = array();
+
+  $items['admin/config/user-interface/ie_view_mode'] = array(
+    'title' => 'Internet Explorer view mode',
+    'description' => 'Configuration for Internet Explorer view mode',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ie_view_mode_form'),
+    'access arguments' => array('access administration pages'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
+/**
+ * Page callback: IE View Mode settings
+ *
+ * @see ie_view_mode_menu()
+ */
+function ie_view_mode_form($form, &$form_state) {
+  // Create values to use in our drop down list
+  $mode_values = array(
+    'IE=edge,chrome=1' => t('Latest/Edge'),
+    'IE=EmulateIE9' => t('Internet Explorer 9'),
+    'IE=EmulateIE8' => t('Internet Explorer 8'),
+    'IE=EmulateIE7' => t('Internet Explorer 7'),
+  );
+
+  // Build the form
+  $form['ie_view_mode'] = array(
+    '#type' => 'select',
+    '#title' => t('View Mode'),
+    '#options' => $mode_values,
+    '#default_value' => variable_get('ie_view_mode', 'IE=edge,chrome=1'),
+    '#description' => t('Choose which mode to set the X-UA-Compatible HTTP header to.'),
+  );
+
+  // Create a submit button and handle variable setting
+  return system_settings_form($form);
+}

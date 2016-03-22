@@ -1,0 +1,5 @@
+name = Internet Explorer View Mode
+description = Force Internet Explorer into different view modes using different X-UA-Compatible http headers
+core = 7.x
+
+configure = admin/config/user-interface/ie_view_mode
