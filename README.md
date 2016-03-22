@@ -1,4 +1,4 @@
-# Internet Explorer View Mode Module
+# Internet Explorer View Mode
 
 A simple Drupal module to add the X-UA-Compatible HTTP header to all pages
 regardless of theme or area.
@@ -18,4 +18,4 @@ them. Configuration of the module is found in Configuration -> User interface.
 
 The available options are currently limited to Internet Explorer 7, 8, 9, and
 Edge. These modes set the HTTP header record to something like "IE=EmulateIE9".
-These modes should probably never be used, but they are there for completeness.
+While it is unlikely these modes will be needed, they are available.
