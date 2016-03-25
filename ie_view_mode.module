@@ -56,11 +56,25 @@ function ie_view_mode_menu() {
     'description' => 'Configuration for Internet Explorer view mode',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('ie_view_mode_form'),
-    'access arguments' => array('access administration pages'),
+    'access arguments' => array('modify ie view mode'),
     'type' => MENU_NORMAL_ITEM,
   );
 
   return $items;
+}
+
+/**
+ * Implements hook_permission().
+ *
+ * Adds permission item for the administrative menu
+ */
+function ie_view_mode_permission() {
+  return array(
+    'modify ie view mode' => array(
+      'title' => t('Modify Internet Explorer mode'),
+      'description' => t('Modify the view mode in which Internet Explorer is set'),
+    ),
+  );
 }
 
 /**
