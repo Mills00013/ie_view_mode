@@ -1,0 +1,10 @@
+<?php
+
+/**
+ * Implements hook_uninstall().
+ *
+ * Runs during uninstall, cleaning up old variables
+ */
+function ie_view_mode_uninstall() {
+  variable_del('ie_view_mode');
+}
